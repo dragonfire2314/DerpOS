@@ -25,12 +25,12 @@ Kernel_Stack_Start2:
 
 GDT_Contents:
 db 0, 0, 0, 0, 0, 0, 0, 0			
-db 255, 255, 0, 0, 0, 0x9A, 0xCF, 0	
-db 255, 255, 0, 0, 0, 0x92, 0xCF, 0	
-db 255, 255, 0, 0, 0, 0xFA, 0xCF, 0	
-db 255, 255, 0, 0, 0, 0xF2, 0xCF, 0
-db 255, 255, 0, 0, 0, 0x9A, 0xC3, 0xC0
-db 255, 255, 0, 0, 0, 0x92, 0xC3, 0xC0
+db 255, 255, 0, 0, 0, 0x9A, 0xCF, 0    ;Ring 0 Code (No high half mapping)
+db 255, 255, 0, 0, 0, 0x92, 0xCF, 0	   ;Ring 0 Data (No high half mapping)
+db 255, 255, 0, 0, 0, 0xFA, 0xCF, 0	   ;Ring 3 Code
+db 255, 255, 0, 0, 0, 0xF2, 0xCF, 0    ;Ring 3 Data
+db 255, 255, 0, 0, 0, 0x9A, 0xC3, 0xC0 ;Kernel Code (High Half mapping)
+db 255, 255, 0, 0, 0, 0x92, 0xC3, 0xC0 ;Kernel Data (High Half mapping)
 ;16Bit
 db 255, 255, 0, 0, 0, 0x9B, 0, 0	
 db 255, 255, 0, 0, 0, 0x93, 0, 0
@@ -127,10 +127,6 @@ _highKernelAsm:
 	call _high_half_kmain
 	ret
 
-%include "Code/scheduler.asm"
-%include "Code/asm/ata.asm"
-%include "Code/graphics/int32.asm"
-
 global _testFunc
 _testFunc:
 	int 35
@@ -142,6 +138,11 @@ _defualt_ISR:			;Default ISR - Resets IRQs then rets
 	mov al, 20h
     out 20h, al
 	iret
+
+%include "Code/scheduler.asm"
+%include "Code/asm/ata.asm"
+%include "Code/asm/irq.asm"
+%include "Code/asm/int32.asm"
 
 extern _syscall
 global _syscall_int
@@ -179,6 +180,17 @@ _syscall_int:
 	mov es, eax
 	mov fs, eax
 	mov gs, eax
+
+	popad
+	iret
+
+extern _breakpoint_handler
+global _breakpoint
+_breakpoint:
+	cli
+	pushad
+
+	call _breakpoint_handler
 
 	popad
 	iret
@@ -231,9 +243,20 @@ _Pagging_CR0_CR3_Setup:
 global _write_port
 global _read_port
 
+global _read_port_w
+global _write_port_w
 
+_read_port_w:
+	mov edx, [esp + 4]
+			
+	in ax, dx
+	ret
 
-
+_write_port_w:
+	mov   edx, [esp + 4]    
+	mov   ax, [esp + 4 + 4]  
+	out   dx, ax  
+	ret
 
 
 _read_port:
@@ -250,8 +273,7 @@ _write_port:
 
 _load_idt:
 	mov edx, [esp + 4]
-	lidt [edx] 
-	sti		
+	lidt [edx] 		
 	ret
 
 _keyboard_handler:                 

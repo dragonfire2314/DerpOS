@@ -1,0 +1,12 @@
+Functions:
+	write_file(Drive, file, data);
+	load_file(Drive, file);
+	
+	enumerate_drives();
+		-Finds all drives on the system
+		-Detects the files systems of the drives
+		-Detects the drive the OS lives on
+	find_drives();
+		-Returns list of avalible drives
+	
+	

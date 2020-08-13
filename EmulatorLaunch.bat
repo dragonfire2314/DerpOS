@@ -1,2 +1,1 @@
-qemu-system-i386 -d guest_errors -monitor stdio -kernel kernel.elf
-pause
+qemu-system-i386 -boot d -cdrom DerpOS.iso -m 64

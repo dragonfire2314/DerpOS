@@ -2,13 +2,14 @@ global _ata_disk_wait
 global _ata_drq_wait
 global _ata_getData
 global _ata_writeData
+global _atapi_get2ksector
 
-
+;%define ATA_STATUS 177h
 
 _ata_drq_wait:
     pusha
     xor al, al
-    mov dx, 01F7h
+    mov dx, 1F7h
 .loop:   
     in  al, dx
     test al, 008h
@@ -20,7 +21,7 @@ _ata_drq_wait:
 _ata_disk_wait:
     pusha
     xor ax, ax
-    mov dx, 01F7h
+    mov dx, 1F7h
 .loop:
     in  al, dx
     and al, 0C0h
@@ -37,6 +38,16 @@ _ata_getData:
 	mov     dx, 01F0h
 	;mov     edi, 1000000h
 	mov     ecx, 256
+	rep     insw
+	ret
+
+_atapi_get2ksector:
+;; get data from port
+	mov edi, [esp+4]
+
+	mov     dx, 01F0h
+	;mov     edi, 1000000h
+	mov     ecx, 2048
 	rep     insw
 	ret
 
