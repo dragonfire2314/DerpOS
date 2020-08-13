@@ -1,6 +1,8 @@
 # DerpOS
 An operating system written entirely in C and assembly using syslinux for the stage 1 and stage 2 bootloaders.
 
+(Code was recently changed to c++ although only structs from c++ were used, it can and should be reverted to c).
+
 DerpOS was originally created as a project for a operating systems college course, but quickly went beyond the original goals. After creating a simple kernel and console with basic input and a simple vga character output for the class, many other features were added.
 
 ### Features
