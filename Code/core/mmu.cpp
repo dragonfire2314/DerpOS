@@ -199,7 +199,7 @@ void splitNode(PageEntry* node, uint32 size1)
 }
 
 void* malloc_page_aligned(uint32 size)
-{
+{    
     uint32* temp;
 
     uint32 pageCount = (size / 0x1000) + 1;
@@ -228,6 +228,12 @@ void* malloc_page_aligned(uint32 size)
     //Alloc mem
     temp = (uint32*)alloc_page_count(pageCount);
     addNode(temp, pageCount);
+
+
+    serial_write_string("ALLOCATING: ");  
+    serial_write_int((uint32)temp);
+    serial_write_string("\r\n");
+
 
     return temp;
 }
@@ -543,16 +549,16 @@ unsigned int* k_malloc_large(unsigned int sizeInBytes)
 }
 
 //Memset
-void memset(unsigned char* loc, char val, unsigned int size)
+void memset(void* loc, char val, unsigned int size)
 {
     for(int i = 0; i < size; i++)
 	{
-		loc[i] = val;
+		((char*)loc)[i] = val;
 	}
 }
 
 //Memcopy
-void memcpy(void* dest, void* src, uint32 size)
+void memcpy(void* dest, const void* src, uint32 size)
 {
     for (int i = 0; i < size; i++)
     {

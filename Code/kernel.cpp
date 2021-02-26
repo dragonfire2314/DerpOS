@@ -47,10 +47,13 @@ void kernel_ultimate()
 	kernelLog_string("Loading Terminal Process...");
 	File_info info = readFile('C', "TERMINAL.ELF");
     if (info.data == 0) serial_write_string("File data not returned \r\n");
-	else scheduler_addProcess(info.data);
+	// else scheduler_addProcess(info.data);
+	else serial_write_string("File Found and returned\r\n");
 
 	//This thread is being used for the application viewer
-	begin_desktop();
+	start_desktop();
+
+	while(1);
 }
 
 void high_half_kmain()
@@ -109,6 +112,7 @@ void kmain(void)
 	
 	serial_write_debug("Width: ", info->width);
 	serial_write_debug("Height: ", info->height);
+	serial_write_debug("BPP: ", info->bpp);
 	serial_write_debug("Frame: ", (uint32)info->frameBuffer);
 	serial_write_debug("KFrame: ", (uint32)info->kenel_frameBuffer);
 

@@ -1,8 +1,11 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+//Defines
 #define NULL 0
+#define INT_MAX 2147483647
 
+//Typedefs
 typedef unsigned char  ub;
 typedef unsigned short uh;
 typedef unsigned int   uw;
@@ -26,5 +29,12 @@ typedef unsigned int   uint32;
 typedef char  sint8;
 typedef short sint16;
 typedef int   sint32;
+
+//Structures
+struct Vector2
+{
+    uint32 x;
+    uint32 y;
+};
 
 #endif

@@ -109,6 +109,7 @@ Video_Info vbe_init()
     info.kenel_frameBuffer = (uint8*)frameBuffer - 0xc0000000;
     info.width =  vbeModeInfo->width;
     info.height = vbeModeInfo->height;
+    info.bpp = vbeModeInfo->bpp;
 
     return info;
 }

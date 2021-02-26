@@ -16,8 +16,8 @@ void MEMORY_ALLOC_TEST_SUITE () ;
 
 unsigned int* kmalloc(int size);
 unsigned long* k_create_4k_block();
-void memset(unsigned char* loc, char val, unsigned int size);
-void memcpy(void* dest, void* src, uint32 size);
+void memset(void* loc, char val, unsigned int size);
+void memcpy(void* dest, const void* src, uint32 size);
 unsigned int* k_malloc_large(unsigned int sizeInBytes);
 unsigned int* k_create_512_block();
 unsigned int* k_create_2k_block();

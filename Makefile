@@ -1,5 +1,5 @@
 
-DerpOS: compile_asm compile_cpp link makeTerminal objcopy build-iso
+DerpOS: compile_asm compile_cpp compile_upng link makeTerminal objcopy build-iso
 
 compile_asm:
 	nasm -f elf32 Code\kernel.asm -o Compiled\kasm.o
@@ -14,6 +14,7 @@ compile_cpp:
 	g++ -m32 -c Code\disk\ata.cpp -o Compiled\ata.o -ffreestanding -nostdlib -nostdinc -Wno-write-strings
 	g++ -m32 -c Code\disk\drivers\atapi_driver.cpp -o Compiled\atapi_driver.o -ffreestanding -nostdlib -nostdinc -Wno-write-strings
 	g++ -m32 -c Code\global\string\cstring.cpp -o Compiled\cstring.o -ffreestanding -nostdlib -nostdinc -Wno-write-strings
+	g++ -m32 -c Code\global\error.cpp -o Compiled\error.o -ffreestanding -nostdlib -nostdinc -Wno-write-strings
 	g++ -m32 -c Code\graphics\vgaText.cpp -o Compiled\vgaText.o -ffreestanding -nostdlib -nostdinc -Wno-write-strings
 	g++ -m32 -c Code\kernelLog.cpp -o Compiled\kernelLog.o -ffreestanding -nostdlib -nostdinc -Wno-write-strings
 	g++ -m32 -c Code\util\elf\elf.cpp -o Compiled\elf.o -ffreestanding -nostdlib -nostdinc -Wno-write-strings
@@ -21,9 +22,14 @@ compile_cpp:
 	g++ -m32 -c Code\graphics\vbe.cpp -o Compiled\vbe.o -ffreestanding -nostdlib -nostdinc -Wno-write-strings
 	g++ -m32 -c Code\graphics\windowManager.cpp -o Compiled\windowManager.o -ffreestanding -nostdlib -nostdinc -Wno-write-strings
 	g++ -m32 -c Code\graphics\draw\shapes.cpp -o Compiled\shapes.o -ffreestanding -nostdlib -nostdinc -Wno-write-strings
+	g++ -m32 -c Code\graphics\draw\image.cpp -o Compiled\image.o -ffreestanding -nostdlib -nostdinc -Wno-write-strings
 	g++ -m32 -c Code\graphics\screen.cpp -o Compiled\screen.o -ffreestanding -nostdlib -nostdinc -Wno-write-strings
 	g++ -m32 -c Code\desktop\desktop.cpp -o Compiled\desktop.o -ffreestanding -nostdlib -nostdinc -Wno-write-strings
+	g++ -m32 -c Code\desktop\window.cpp -o Compiled\window.o -ffreestanding -nostdlib -nostdinc -Wno-write-strings
 	g++ -m32 -c Code\util\string.cpp -o Compiled\string.o -ffreestanding -nostdlib -nostdinc -Wno-write-strings
+
+compile_upng:
+	g++ -m32 -c Code\external\upng\upng.c -o Compiled\upng.o -ffreestanding -nostdlib -nostdinc -Wno-write-strings
 
 link:
 	ld -T link.ld -o Compiled\kernel \
@@ -47,6 +53,11 @@ link:
 	Compiled\screen.o \
 	Compiled\desktop.o \
 	Compiled\string.o \
+	Compiled\image.o \
+	Compiled\error.o \
+	Compiled\window.o \
+	Compiled\upng.o
+
 	-build-id=none
 
 objcopy:
@@ -59,6 +70,9 @@ build-iso:
 
 makeTerminal:
 	make -C .\TestProgram\
+
+# run: compile_asm compile_cpp link makeTerminal objcopy build-iso
+# 	./bochsrc.bxrc
 
 clean:
 	del Compiled\*.o

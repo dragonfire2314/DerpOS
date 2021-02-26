@@ -10,7 +10,7 @@ floppy_bootsig_check: disabled=0
 # no floppya
 # no floppyb
 ata0: enabled=1, ioaddr1=0x1f0, ioaddr2=0x3f0, irq=14
-ata0-master: type=cdrom, path="C:\Users\Tanner\Desktop\New DerpOS C++ attempt\DerpOS.iso", status=inserted, model="Generic 1234", biosdetect=auto
+ata0-master: type=cdrom, path="F:\Programming\DerpOS 2-25-21\DerpOS\DerpOS.iso", status=inserted, model="Generic 1234", biosdetect=auto
 ata0-slave: type=none
 ata1: enabled=1, ioaddr1=0x170, ioaddr2=0x370, irq=15
 ata1-master: type=none
@@ -50,7 +50,7 @@ sound: waveoutdrv=win, waveout=none, waveindrv=win, wavein=none, midioutdrv=win,
 speaker: enabled=1, mode=sound
 parport1: enabled=1, file=none
 parport2: enabled=0
-com1: enabled=1, mode=file, dev="C:\Users\Tanner\Desktop\New DerpOS C++ attempt\serialOutBochs.txt"
+com1: enabled=1, mode=file, dev="F:\Programming\DerpOS 2-25-21\DerpOS\serialOutBochs.txt"
 com2: enabled=0
 com3: enabled=0
 com4: enabled=0

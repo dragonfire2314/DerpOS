@@ -13,7 +13,7 @@ int Usermain()
 	info.height = 300;
 	info.windowName = 'T';
 
-	createWindow(window_callback, &info);
+	//createWindow(window_callback, &info);
 
 	while(1){}
 }
