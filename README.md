@@ -1,26 +1,40 @@
-# DerpOS
-An operating system written entirely in C and assembly using syslinux for the stage 1 and stage 2 bootloaders.
+# Limine C Template
 
-(Code was recently changed to c++ although only structs from c++ were used, it can and should be reverted to c).
+This repository will demonstrate how to set up a basic x86-64 kernel in C using Limine.
 
-DerpOS was originally created as a project for a operating systems college course, but quickly went beyond the original goals. After creating a simple kernel and console with basic input and a simple vga character output for the class, many other features were added.
+It is recommended to cross reference the contents of this repository with [the Limine Bare Bones](https://osdev.wiki/wiki/Limine_Bare_Bones) OSDev wiki page.
 
-### Features
-- Basic Round Robin Scheduling
-- Programming loading form hardrive
-- Basic harddisk implementation
-- Procces GDT
-- IDT
-- Memory Managment
-- Pagging
-- Process Isolation
-- Syscall from external process;
+## How to use this?
 
-### Planned Features
-- Kernel Console
-- More Syscalls
-- Basic pixel graphics
-- Dynamic memory allocation
+### Dependencies
 
-### Credit
-The code for DerpOS was written entirly by Tanner Kern over the course of 2 years on and off.
+Any `make` command depends on GNU make (`gmake`) and is expected to be run using it. This usually means using `make` on most GNU/Linux distros, or `gmake` on other non-GNU systems.
+
+All `make all*` targets depend on a GNU-compatible C toolchain capable of generating x86-64 ELF objects. Usually `gcc/binutils` or `clang/llvm/lld` provided by any x86-64 UNIX like (including Linux) distribution will suffice.
+
+Additionally, building an ISO with `make all` requires `xorriso`, and building a HDD/USB image with `make all-hdd` requires `sgdisk` (usually from `gdisk` or `gptfdisk` packages) and `mtools`.
+
+### Toolchain selection
+
+The `TOOLCHAIN` and `TOOLCHAIN_PREFIX` `make` variables can be used to set the toolchain. `TOOLCHAIN` can be set to `llvm` to use Clang/LLVM.
+
+For example:
+```
+make TOOLCHAIN=llvm
+```
+or:
+```
+make TOOLCHAIN_PREFIX=x86_64-elf-
+```
+
+### Makefile targets
+
+Running `make all` will compile the kernel (from the `kernel/` directory) and then generate a bootable ISO image.
+
+Running `make all-hdd` will compile the kernel and then generate a raw image suitable to be flashed onto a USB stick or hard drive/SSD.
+
+Running `make run` will build the kernel and a bootable ISO (equivalent to make all) and then run it using `qemu` (if installed).
+
+Running `make run-hdd` will build the kernel and a raw HDD image (equivalent to make all-hdd) and then run it using `qemu` (if installed).
+
+The `run-uefi` and `run-hdd-uefi` targets are equivalent to their non `-uefi` counterparts except that they boot `qemu` using a UEFI-compatible firmware.
